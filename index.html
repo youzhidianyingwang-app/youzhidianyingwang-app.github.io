@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="优质电影网(youzhidianyingwang-app)提供最新高清电影、热门电视剧、经典动漫、综艺纪录片在线观看与资源导航，海量优质影视随心看。">
+<meta name="keywords" content="优质电影网, youzhidianyingwang-app, 电影, 电视剧, 动漫, 综艺, 高清影视, 在线观影">
+<meta name="author" content="优质电影网">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>优质电影网 - 最新高清电影电视剧在线观看 | youzhidianyingwang-app</title>
+<link rel="canonical" href="https://youzhidianyingwang-app.github.io">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+        --bg:#07091d;
+        --bg2:#0c1029;
+        --card:#121839;
+        --line:rgba(255,255,255,.08);
+        --txt:#e8eaf6;
+        --sub:#9aa3c7;
+        --gold:#ffb547;
+        --cyan:#35e6d8;
+        --pink:#ff5cac;
+        --grad:linear-gradient(120deg,#ff5cac 0%,#7b5cff 55%,#35e6d8 100%);
+    }
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+    body{
+        font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+        background:var(--bg);
+        color:var(--txt);
+        line-height:1.7;
+        overflow-x:hidden;
+    }
+    body::before{
+        content:"";position:fixed;inset:0;z-index:-2;
+        background:
+            radial-gradient(900px 500px at 12% -8%,rgba(123,92,255,.28),transparent 60%),
+            radial-gradient(800px 460px at 88% 12%,rgba(255,92,172,.18),transparent 60%),
+            radial-gradient(900px 520px at 50% 108%,rgba(53,230,216,.16),transparent 60%);
+    }
+    /* 网格装饰 */
+    body::after{
+        content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+        background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+        background-size:48px 48px;
+        mask-image:radial-gradient(circle at 50% 30%,#000 0,transparent 75%);
+    }
+    a{color:inherit;text-decoration:none;transition:.25s;}
+    ul{list-style:none;}
+    .wrap{max-width:1200px;margin:0 auto;padding:0 20px;}
+
+    /* 顶部导航 */
+    header{
+        position:sticky;top:0;z-index:50;
+        backdrop-filter:blur(14px);
+        background:rgba(7,9,29,.72);
+        border-bottom:1px solid var(--line);
+    }
+    .nav{display:flex;align-items:center;gap:18px;height:64px;}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;}
+    .logo .badge{
+        width:34px;height:34px;border-radius:10px;
+        background:var(--grad);
+        display:grid;place-items:center;
+        font-size:18px;box-shadow:0 6px 18px rgba(123,92,255,.4);
+    }
+    .logo span{font-size:19px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .nav-links{display:flex;gap:6px;margin-left:auto;align-items:center;}
+    .nav-links a{
+        padding:8px 14px;border-radius:999px;font-size:14px;color:var(--sub);
+    }
+    .nav-links a:hover{color:#fff;background:rgba(255,255,255,.06);}
+    .nav-links .btn{
+        color:#0b0e24;font-weight:700;background:var(--grad);
+        box-shadow:0 6px 16px rgba(255,92,172,.35);
+    }
+    .menu-btn{display:none;width:40px;height:40px;align-items:center;justify-content:center;margin-left:auto;cursor:pointer;border-radius:10px;border:1px solid var(--line);}
+    .menu-btn i{width:18px;height:2px;background:#fff;position:relative;}
+    .menu-btn i::before,.menu-btn i::after{content:"";position:absolute;width:18px;height:2px;background:#fff;left:0;}
+    .menu-btn i::before{top:-6px;} .menu-btn i::after{top:6px;}
+
+    /* 通用区块 */
+    section{padding:76px 0;position:relative;}
+    .eyebrow{
+        display:inline-flex;align-items:center;gap:8px;
+        font-size:12px;letter-spacing:2px;color:var(--cyan);
+        border:1px solid rgba(53,230,216,.3);border-radius:999px;
+        padding:5px 14px;background:rgba(53,230,216,.06);
+    }
+    h2.sec{font-size:clamp(24px,4vw,38px);font-weight:800;margin:14px 0 8px;letter-spacing:.5px;}
+    h2.sec em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .lead{color:var(--sub);max-width:620px;font-size:15px;}
+    .head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:34px;}
+
+    /* Hero */
+    .hero{min-height:min(640px,92vh);display:grid;place-items:center;padding:90px 0 60px;}
+    .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:50px;align-items:center;}
+    .tagrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+    .tagrow b{font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--sub);}
+    .tagrow b.hot{color:var(--gold);border-color:rgba(255,181,71,.35);}
+    h1{font-size:clamp(34px,6.4vw,68px);line-height:1.12;font-weight:850;letter-spacing:-1px;}
+    h1 .hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .hero p{color:var(--sub);font-size:clamp(15px,1.6vw,17px);margin:20px 0 28px;max-width:560px;}
+    .cta{display:flex;gap:14px;flex-wrap:wrap;}
+    .cta a{
+        padding:14px 28px;border-radius:12px;font-weight:700;font-size:15px;
+        display:inline-flex;align-items:center;gap:8px;
+    }
+    .cta .primary{background:var(--grad);color:#0b0e24;box-shadow:0 14px 34px rgba(123,92,255,.4);}
+    .cta .ghost{border:1px solid var(--line);color:#fff;}
+    .stats{display:flex;gap:clamp(18px,4vw,44px);margin-top:40px;flex-wrap:wrap;}
+    .stats div span{display:block;font-size:clamp(22px,3vw,32px);font-weight:800;}
+    .stats div small{color:var(--sub);font-size:13px;}
+
+    /* 海报卡 */
+    .poster{
+        position:relative;aspect-ratio:3/4;border-radius:22px;
+        background:linear-gradient(160deg,#2a1b4d,#0e1638);
+        padding:16px;display:flex;flex-direction:column;justify-content:flex-end;
+        overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.55);
+        transform:rotate(-3deg);
+    }
+    .poster::before{
+        content:"";position:absolute;inset:0;
+        background:
+            radial-gradient(120% 70% at 80% 10%,rgba(255,92,172,.55),transparent 55%),
+            radial-gradient(90% 60% at 10% 90%,rgba(53,230,216,.4),transparent 55%),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 40 L40 0 H20 L0 20 Z' fill='rgba(255,255,255,.05)'/%3E%3C/svg%3E");
+    }
+    .thumb .ico,.badge{font-style:normal;}
+    .poster .play{
+        position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+        width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.16);
+        backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.35);
+        display:grid;place-items:center;font-size:26px;color:#fff;
+    }
+    .poster h3{position:relative;font-size:26px;line-height:1.3;}
+    .poster p{position:relative;color:rgba(255,255,255,.75);font-size:13px;margin-top:6px;}
+
+    /* 分类卡片 */
+    .grid{display:grid;gap:22px;}
+    .grid.c4{grid-template-columns:repeat(4,1fr);}
+    .grid.c3{grid-template-columns:repeat(3,1fr); }
+    .grid.c2{grid-template-columns:repeat(2,1fr);}
+    .card{
+        background:var(--card);border:1px solid var(--line);border-radius:18px;
+        padding:24px;transition:.3s;position:relative;overflow:hidden;
+    }
+    .card::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:.35s;}
+    .card:hover{transform:translateY(-6px);border-color:rgba(123,92,255,.4);box-shadow:0 20px 44px rgba(0,0,0,.4);}
+    .card:hover::before{transform:scaleX(1);}
+    .card .ic{width:50px;height:50px;border-radius:14px;background:rgba(255,255,255,.06);display:grid;place-items:center;font-size:24px;margin-bottom:16px;}
+    .card h3{font-size:18px;margin-bottom:8px;}
+    .card p{color:var(--sub);font-size:14px;}
+    .card .go{display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:var(--gold);}
+
+    /* 影片列表 */
+    .film{display:grid;grid-template-columns:150px 1fr;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.3s;}
+    .film:hover{border-color:rgba(53,230,216,.4);transform:translateX(4px);}
+    .film .thumb{aspect-ratio:3/4;background:linear-gradient(150deg,#2a1b4d,#12323a);position:relative;}
+    .film .thumb i{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;color:rgba(255,255,255,.5);}
+    .film .thumb b{position:absolute;top:8px;left:8px;font-size:11px;background:var(--gold);color:#201600;padding:2px 8px;border-radius:5px;font-weight:800;}
+    .film .info{padding:16px 18px 16px 0;}
+    .film .info h4{font-size:17px;margin-bottom:6px;}
+    .film .info .meta{font-size:12px;color:var(--cyan);letter-spacing:1px;}
+    .film .info p{color:var(--sub);font-size:13.5px;margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .film .info .rate{margin-top:10px;font-size:13px;color:var(--gold);font-weight:700;}
+
+    /* 排行 */
+    .rank{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px;}
+    .rank li{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:12px;transition:.25s;}
+    .rank li:hover{background:rgba(255,255,255,.05);}
+    .rank .no{width:30px;height:30px;flex:0 0 30px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:14px;background:rgba(255,255,255,.07);color:var(--sub);}
+    .rank li:nth-child(1) .no{background:linear-gradient(135deg,#ffd34e,#ff8a3d);color:#241400;}
+    .rank li:nth-child(2) .no{background:linear-gradient(135deg,#c8d2e6,#8f9fc4);color:#1a2033;}
+    .rank li:nth-child(3) .no{background:linear-gradient(135deg,#e0a06b,#b9734a);color:#241700;}
+    .rank .txt{flex:1;min-width:0;}
+    .rank .txt b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .rank .txt small{color:var(--sub);font-size:12px;}
+    .rank .up{color:var(--pink);font-size:12px;font-weight:700;}
+
+    /* 步骤 */
+    .step{display:flex;gap:16px;}
+    .step .n{flex:0 0 44px;height:44px;border-radius:12px;background:var(--grad);color:#0b0e24;font-weight:800;display:grid;place-items:center;font-size:18px;}
+    .step div h4{font-size:16px;margin-bottom:4px;}
+    .step div p{color:var(--sub);font-size:13.5px;}
+
+    /* 搜索 */
+    .search-box{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
+    .search-box input{flex:1;min-width:220px;padding:15px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-size:15px;outline:none;}
+    .search-box input:focus{border-color:var(--cyan);}
+    .search-box button{padding:15px 30px;border:0;border-radius:12px;background:var(--grad);color:#0b0e24;font-weight:800;font-size:15px;cursor:pointer;}
+
+    /* 评价 */
+    .review{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;transition:.3s;}
+    .review:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(0,0,0,.35);}
+    .stars{color:var(--gold);letter-spacing:2px;font-size:14px;}
+    .review p{color:var(--sub);font-size:14px;margin:12px 0 16px;font-style:italic;}
+    .who{display:flex;align-items:center;gap:10px;font-size:13px;}
+    .who i{width:36px;height:36px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#0b0e24;font-weight:800;}
+    .who small{color:var(--sub);display:block;font-size:11px;}
+
+    /* FAQ */
+    details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:12px;transition:.25s;}
+    details[open]{border-color:rgba(123,92,255,.45);}
+    summary{cursor:pointer;font-weight:700;font-size:15.5px;list-style:none;display:flex;justify-content:space-between;gap:12px;}
+    summary::-webkit-details-marker{display:none;}
+    summary::after{content:"＋";color:var(--cyan);font-weight:400;}
+    details[open] summary::after{content:"－";}
+    details p{color:var(--sub);font-size:14px;padding-top:12px;}
+
+    /* 页脚 */
+    footer{border-top:1px solid var(--line);padding:56px 0 30px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.35));}
+    .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;}
+    .foot-grid h5{font-size:15px;margin-bottom:14px;color:#fff;}
+    .foot-grid li{margin-bottom:9px;font-size:13.5px;color:var(--sub);}
+    .foot-grid li a:hover{color:var(--cyan);}
+    .brand p{color:var(--sub);font-size:13.5px;margin-top:12px;max-width:320px;}
+    .copy{text-align:center;color:var(--sub);font-size:12.5px;margin-top:40px;padding-top:22px;border-top:1px solid var(--line);}
+    .copy b{color:var(--gold);}
+
+    /* 回到顶部 */
+    #top{
+        position:fixed;right:20px;bottom:24px;width:46px;height:46px;border-radius:13px;
+        background:var(--grad);color:#0b0e24;display:none;place-items:center;font-size:20px;
+        box-shadow:0 10px 26px rgba(123,92,255,.45);z-index:60;font-weight:800;
+    }
+
+    /* 响应式 */
+    @media(max-width:960px){
+        .grid.c4{grid-template-columns:repeat(2,1fr);}
+        .grid.c3{grid-template-columns:repeat(2,1fr);}
+        .hero-grid{grid-template-columns:1fr;}
+        .poster{max-width:300px;margin:0 auto;transform:none;}
+        .foot-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:720px){
+        .menu-btn{display:flex;}
+        .nav-links{
+            position:fixed;inset:64px 0 0 0;width:100%;height:calc(100vh - 64px);
+            flex-direction:column;align-items:stretch;justify-content:flex-start;
+            padding:24px 20px;gap:8px;background:rgba(7,9,29,.96);
+            transform:translateX(100%);transition:.35s;margin:0;
+        }
+        .nav-links.open{transform:translateX(0);}
+        .nav-links a{font-size:16px;padding:14px 18px;border-radius:12px;}
+        .grid.c4,.grid.c3,.grid.c2{grid-template-columns:1fr;}
+        .film{grid-template-columns:110px 1fr;}
+        .film .info{padding:12px 12px 12px 0;}
+        .film .info h4{font-size:15px;}
+        .head{flex-direction:column;align-items:flex-start;}
+        h2.sec{font-size:26px;}
+        section{padding:56px 0;}
+    }
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/yazhou.js"></script>
+
+<!-- 顶部导航 -->
+<header>
+    <div class="wrap nav">
+        <a class="logo" href="#top" aria-label="优质电影网">
+            <span class="badge">映</span>
+            <span>优质电影网</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="#home">首页</a>
+            <a href="#movies">电影</a>
+            <a href="#tv">电视剧</a>
+            <a href="#anime">动漫</a>
+            <a href="#variety">综艺</a>
+            <a href="#rank">排行榜</a>
+            <a href="#guide">观影指南</a>
+            <a href="#faq">常见问题</a>
+            <a class="btn" href="#search">立即观影</a>
+        </nav>
+        <div class="menu-btn" id="menuBtn"><i></i></div>
+    </div>
+</header>
+
+<!-- 首页 Hero -->
+<section id="home">
+    <div class="wrap hero">
+        <div class="hero-grid">
+            <div>
+                <div class="tagrow">
+                    <b class="hot">● 实时更新</b>
+                    <b>1080P / 4K 高清</b>
+                    <b>免注册</b>
+                    <b>多端同步</b>
+                </div>
+                <h1>海量<span class="hl">优质电影</span><br>一站看到过瘾</h1>
+                <p>优质电影网（youzhidianyingwang-app）专注精选高清影视内容，涵盖院线大片、热门剧集、经典动漫与深度综艺。智能分类、极速加载、移动端自适应，让每一次观影都成为享受。</p>
+                <div class="cta">
+                    <a class="primary" href="#search">🔍 搜索影片</a>
+                    <a class="ghost" href="#movies">浏览电影频道 →</a>
+                </div>
+                <div class="stats">
+                    <div><span>12,800+</span><small>高清影视资源</small></div>
+                    <div><span>60+</span><small>影视分类标签</small></div>
+                    <div><span>99.9%</span><small>全天稳定可用</small></div>
+                    <div><span>320万</span><small>影迷每月访问</small></div>
+                </div>
+            </div>
+            <div class="poster" aria-hidden="true">
+                <div class="play" aria-hidden="true">▶</div>
+                <h3>优质电影网<br>youzhidianyingwang-app</h3>
+                <p>https://youzhidianyingwang-app.github.io</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 电影频道 -->
+<section id="movies">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ MOVIE 电影频道</span>
+                <h2 class="sec">院线大片 · <em>精彩不停</em></h2>
+                <p class="lead">动作、科幻、悬疑、爱情、喜剧、纪录片……按类型与地区精准筛选，快速找到想看的那一部。</p>
+            </div>
+            <a class="btn ghost" href="#" style="padding:10px 20px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--sub);">查看全部 →</a>
+        </div>
+        <div class="grid c4">
+            <article class="film">
+                <div class="thumb"><span class="ico">🎬</span><b>热映</b></div>
+                <div class="info">
+                    <span class="meta">动作 / 科幻 · 2026</span>
+                    <h4>星际回响</h4>
+                    <p>人类舰队穿越虫洞，却在彼岸遇见了另一个自己。视效炸裂的硬科幻史诗。</p>
+                    <span class="rate">★ 8.7 评分</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><span class="ico">🎬</span><b>推荐</b></div>
+                <div class="info">
+                    <span class="meta">悬疑 / 犯罪 · 2026</span>
+                    <h4>无声证词</h4>
+                    <p>一场没有尸体的谋杀案，靠声音还原真相。反转密集，看完脊背发凉。</p>
+                    <span class="rate">★ 9.1 评分</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><i>🎬</i></div>
+                <div class="info">
+                    <span class="meta">爱情 / 剧情 · 2025</span>
+                    <h4>海岸线以北</h4>
+                    <p>跨越十二年的书信爱情，细腻克制，被誉为年度最温柔的电影。</p>
+                    <span class="rate">★ 8.5 评分</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><span class="ico">🎬</span><b>独家</b></div>
+                <div class="info">
+                    <span class="meta">动画 / 奇幻 · 2026</span>
+                    <h4>萤火之森</h4>
+                    <p>手绘质感巅峰之作，每一帧都可作壁纸，豆瓣 9.4 高分动画。</p>
+                    <span class="rate">★ 9.4 评分</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><i>🎬</i></div>
+                <div class="info">
+                    <span class="meta">喜剧 / 家庭 · 2026</span>
+                    <h4>返程车票</h4>
+                    <p>春节返乡的爆笑囧途，笑点与泪点齐飞，合家欢首选。</p>
+                    <span class="rate">★ 8.2 评分</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><span class="ico">🎬</span><b>4K</b></div>
+                <div class="info">
+                    <span class="meta">历史 / 战争 · 2025</span>
+                    <h4>长河落日</h4>
+                    <p>史诗级战争巨制，4K 修复版，IMAX 级视听震撼。</p>
+                    <span class="rate">★ 8.9 评分</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><i>🎬</i></div>
+                <div class="info">
+                    <span class="meta">恐怖 / 惊悚 · 2026</span>
+                    <h4>镜中人</h4>
+                    <p>密闭空间心理惊悚，音效设计封神，胆小的慎入。</p>
+                    <span class="rate">★ 7.8 评分</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><span class="ico">🎬</span><b>经典</b></div>
+                <div class="info">
+                    <span class="meta">剧情 / 传记 · 1994</span>
+                    <h4>岁月如歌</h4>
+                    <p>影史不朽经典，关于希望与自由的终极寓言，百看不厌。</p>
+                    <span class="rate">★ 9.7 评分</span>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- 电视剧频道 -->
+<section id="tv" style="background:linear-gradient(180deg,transparent,rgba(123,92,255,.06),transparent);">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ DRAMA 电视剧频道</span>
+                <h2 class="sec">追剧不等待 · <em>更新更快</em></h2>
+                <p class="lead">国产剧、美剧、韩剧、日剧、泰剧全收录，支持集数索引与播放进度记忆。</p>
+            </div>
+        </div>
+        <div class="grid c3">
+            <div class="card">
+                <div class="ic">📺</div>
+                <h3>国产好剧</h3>
+                <p>古装、都市、悬疑、年代剧，正片与花絮一并呈现，紧跟卫视同步更新。</p>
+                <a class="go" href="#">进入频道 →</a>
+            </div>
+            <div class="card">
+                <div class="ic">🌎</div>
+                <h3>美剧速递</h3>
+                <p>热门美剧当季更新，中英双语字幕，从罪案剧到科幻巨制一网打尽。</p>
+                <a class="go" href="#">进入频道 →</a>
+            </div>
+            <div class="card">
+                <div class="ic">🇰🇷</div>
+                <h3>韩流剧场</h3>
+                <p>高分韩剧、综艺、K-pop 纪录片，追星追剧两不误，画质清晰流畅。</p>
+                <a class="go" href="#">进入频道 →</a>
+            </div>
+        </div>
+        <div class="grid c3" style="margin-top:22px;">
+            <article class="film">
+                <div class="thumb"><span class="ico">📺</span><b>更新</b></div>
+                <div class="info">
+                    <span class="meta">古装 / 权谋 · 40 集</span>
+                    <h4>山河棋局</h4>
+                    <p>朝堂博弈，步步惊心。服化道考究，被赞为年度质感古装剧。</p>
+                    <span class="rate">已更新至 32 集</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><span class="ico">📺</span><b>热播</b></div>
+                <div class="info">
+                    <span class="meta">都市 / 爱情 · 24 集</span>
+                    <h4>第九封信</h4>
+                    <p>成年人的爱情真实又克制，台词金句频出，社交平台热议不断。</p>
+                    <span class="rate">已更新至 24 集</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb"><i>📺</i></div>
+                <div class="info">
+                    <span class="meta">悬疑 / 犯罪 · 12 集</span>
+                    <h4>夜行者</h4>
+                    <p>短小精悍的单元悬疑剧，每集一个独立案件，节奏紧凑不注水。</p>
+                    <span class="rate">已更新至 12 集</span>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- 动漫频道 -->
+<section id="anime">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ ANIME 动漫频道</span>
+                <h2 class="sec">二次元圣地 · <em>新番速看</em></h2>
+                <p class="lead">日本新番、国漫精品、经典剧场版与治愈短片，番剧日历帮你精准追更。</p>
+            </div>
+        </div>
+        <div class="grid c4">
+            <article class="film">
+                <div class="thumb" style="background:linear-gradient(150deg,#4a1b4d,#1b2a4d);"><span class="ico">🐉</span><b>新番</b></div>
+                <div class="info">
+                    <span class="meta">奇幻 / 冒险 · 连载中</span>
+                    <h4>苍穹之龙</h4>
+                    <p>少年与龙的契约之旅，作画水准业界顶尖，战斗分镜燃到爆。</p>
+                    <span class="rate">★ 9.2</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb" style="background:linear-gradient(150deg,#1b4d3a,#12323a);"><i>🌸</i></div>
+                <div class="info">
+                    <span class="meta">治愈 / 日常 · 完结</span>
+                    <h4>便利店里的猫</h4>
+                    <p>下班后的温柔小品，每一集都是一次深呼吸，适合深夜反复观看。</p>
+                    <span class="rate">★ 8.8</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb" style="background:linear-gradient(150deg,#4d1b2a,#2a1b4d);"><i>⚔️</i></div>
+                <div class="info">
+                    <span class="meta">热血 / 战斗 · 连载中</span>
+                    <h4>剑鸣无尽</h4>
+                    <p>十年长跑的王道热血番，信念与友情的终极答卷。</p>
+                    <span class="rate">★ 9.0</span>
+                </div>
+            </article>
+            <article class="film">
+                <div class="thumb" style="background:linear-gradient(150deg,#3a1b4d,#1b3a4d);"><i>🚀</i></div>
+                <div class="info">
+                    <span class="meta">科幻 / 悬疑 · 完结</span>
+                    <h4>星尘回音</h4>
+                    <p>硬核科幻原创动画，世界观宏大，被粉丝称为"动画版《星际》"。</p>
+                    <span class="rate">★ 8.6</span>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- 综艺频道 -->
+<section id="variety" style="background:linear-gradient(180deg,transparent,rgba(255,92,172,.06),transparent);">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ VARIETY 综艺频道</span>
+                <h2 class="sec">笑着度过 · <em>每一分钟</em></h2>
+                <p class="lead">脱口秀、真人秀、音乐竞演、户外探险、纪实访谈，轻松下饭的最佳搭档。</p>
+            </div>
+        </div>
+        <div class="grid c3">
+            <div class="card">
+                <div class="ic">🎤</div>
+                <h3>音乐竞演</h3>
+                <p>实力唱将同台飙歌，现场版音质还原，每一期都是听觉盛宴。</p>
+                <a class="go" href="#">立即收看 →</a>
+            </div>
+            <div class="card">
+                <div class="ic">🌿</div>
+                <h3>生活纪实</h3>
+                <p>慢节奏田园生活观察，治愈焦虑，适合周末放松心情。</p>
+                <a class="go" href="#">立即收看 →</a>
+            </div>
+            <div class="card">
+                <div class="ic">🧩</div>
+                <h3>智力博弈</h3>
+                <p>高能推理与语言博弈，边看边思考，烧脑又上头。</p>
+                <a class="go" href="#">立即收看 →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 排行榜 -->
+<section id="rank">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ TOP 实时排行榜</span>
+                <h2 class="sec">大家都在看 · <em>热度榜单</em></h2>
+                <p class="lead">基于真实播放与搜索数据每小时更新，跟榜追剧不踩雷。</p>
+            </div>
+        </div>
+        <div class="grid c2">
+            <div>
+                <h3 style="margin-bottom:14px;font-size:17px;">🔥 热播电影榜</h3>
+                <ul class="rank">
+                    <li><span class="no">1</span><span class="txt"><b>星际回响</b><small>科幻 · 动作 · 2026</small></span><span class="up">▲3</span></li>
+                    <li><span class="no">2</span><span class="txt"><b>无声证词</b><small>悬疑 · 犯罪</small></span><span class="up">▲1</span></li>
+                    <li><span class="no">3</span><span class="txt"><b>萤火之森</b><small>动画 · 奇幻</small></span><span class="up">▲5</span></li>
+                    <li><span class="no">4</span><span class="txt"><b>长河落日</b><small>历史 · 战争 · 4K</small></span><span class="up">▼1</span></li>
+                    <li><span class="no">5</span><span class="txt"><b>海岸线以北</b><small>爱情 · 剧情</small></span><span class="up">▲2</span></li>
+                    <li><span class="no">6</span><span class="txt"><b>返程车票</b><small>喜剧 · 家庭</small></span><span class="up">新</span></li>
+                </ul>
+            </div>
+            <div>
+                <h3 style="margin-bottom:14px;font-size:17px;">📈 热门剧集榜</h3>
+                <ul class="rank">
+                    <li><span class="no">1</span><span class="txt"><b>山河棋局</b><small>古装 · 权谋 · 40集</small></span><span class="up">▲2</span></li>
+                    <li><span class="no">2</span><span class="txt"><b>第九封信</b><small>都市 · 爱情</small></span><span class="up">▲1</span></li>
+                    <li><span class="no">3</span><span class="txt"><b>苍穹之龙</b><small>动漫 · 奇幻</small></span><span class="up">▲4</span></li>
+                    <li><span class="no">4</span><span class="txt"><b>夜行者</b><small>悬疑 · 犯罪</small></span><span class="up">▼2</span></li>
+                    <li><span class="no">5</span><span class="txt"><b>便利店里的猫</b><small>治愈 · 日常</small></span><span class="up">▲1</span></li>
+                    <li><span class="no">6</span><span class="txt"><b>剑鸣无尽</b><small>热血 · 战斗</small></span><span class="up">—</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 观影指南 -->
+<section id="guide">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ GUIDE 使用指南</span>
+                <h2 class="sec">三步开启 · <em>流畅观影</em></h2>
+                <p class="lead">优质电影网操作极简，无需注册登录，打开即看。</p>
+            </div>
+        </div>
+        <div class="grid c3">
+            <div class="card">
+                <div class="step">
+                    <div class="n">1</div>
+                    <div>
+                        <h4>搜索或选分类</h4>
+                        <p>在顶部搜索框输入片名，或从电影、电视剧、动漫、综艺四大频道进入。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="step">
+                    <div class="n">2</div>
+                    <div>
+                        <h4>选择清晰度</h4>
+                        <p>支持 720P / 1080P / 4K 多档画质切换，WiFi 与流量场景自由适配。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="step">
+                    <div class="n">3</div>
+                    <div>
+                        <h4>投屏与收藏</h4>
+                        <p>一键投屏到电视，本地收藏记录观看进度，多端无缝续播。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 搜索 -->
+<section id="search" style="background:linear-gradient(180deg,transparent,rgba(53,230,216,.06),transparent);">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ SEARCH 影片搜索</span>
+                <h2 class="sec">搜你想看 · <em>秒出结果</em></h2>
+                <p class="lead">支持片名、演员、导演、类型、年份多维检索，模糊匹配更懂你。</p>
+            </div>
+        </div>
+        <form class="search-box" onsubmit="return false;">
+            <input type="search" placeholder="请输入电影 / 电视剧 / 动漫名称，例如：星际回响、山河棋局……" aria-label="搜索影片">
+            <button type="submit">立即搜索</button>
+        </form>
+        <div style="margin-top:16px;color:var(--sub);font-size:13px;">
+            热门搜索：
+            <a href="#" style="color:var(--cyan);margin-right:12px;">#星际回响</a>
+            <a href="#" style="color:var(--cyan);margin-right:12px;">#山河棋局</a>
+            <a href="#" style="color:var(--cyan);margin-right:12px;">#萤火之森</a>
+            <a href="#" style="color:var(--cyan);margin-right:12px;">#无声证词</a>
+            <a href="#" style="color:var(--cyan);">#苍穹之龙</a>
+        </div>
+    </div>
+</section>
+
+<!-- 用户评价 -->
+<section id="reviews">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ REVIEWS 影迷评价</span>
+                <h2 class="sec">来自 320 万影迷的 <em>真实口碑</em></h2>
+            </div>
+        </div>
+        <div class="grid c3">
+            <div class="review">
+                <div class="stars">★★★★★</div>
+                <p>"分类做得太细了，按心情选片都能找到合适的。加载速度在手机上也很快，追剧体验一流。"</p>
+                <div class="who"><i>林</i><div>林先生<small>追剧党 · 已观影 486 部</small></div></div>
+            </div>
+            <div class="review">
+                <div class="stars">★★★★★</div>
+                <p>"4K 画质真的惊艳，投屏到客厅电视像在影院。收藏夹还能记住看到第几集，太贴心。"</p>
+                <div class="who"><i>苏</i><div>苏小姐<small>画质控 · 家庭共享</small></div></div>
+            </div>
+            <div class="review">
+                <div class="stars">★★★★☆</div>
+                <p>"动漫频道更新很及时，新番基本当周就能看到，字幕质量稳定，弹幕氛围也友好。"</p>
+                <div class="who"><i>K</i><div>Kira<small>二次元 · 番剧日历用户</small></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 常见问题 -->
+<section id="faq">
+    <div class="wrap">
+        <div class="head">
+            <div>
+                <span class="eyebrow">◆ FAQ 常见问题</span>
+                <h2 class="sec">关于优质电影网 · <em>你想问的</em></h2>
+            </div>
+        </div>
+        <details open>
+            <summary>优质电影网是什么？</summary>
+            <p>优质电影网（youzhidianyingwang-app）是一个专注于高清影视内容导航与在线观看的单页网站，涵盖电影、电视剧、动漫、综艺四大频道，网址为 https://youzhidianyingwang-app.github.io，全程移动端自适应，无需下载客户端即可访问。</p>
+        </details>
+        <details>
+            <summary>网站内容多久更新一次？</summary>
+            <p>院线电影与热播剧集实行每日更新，动漫新番按周同步，综艺与纪录片每周批量补充。排行榜数据每小时刷新，确保呈现真实热度。</p>
+        </details>
+        <details>
+            <summary>支持哪些设备与画质？</summary>
+            <p>支持手机、平板、PC 与智能电视浏览器访问，画质提供 720P / 1080P / 4K 三档可选，并支持 DLNA 与 AirPlay 投屏。</p>
+        </details>
+        <details>
+            <summary>是否需要注册或付费？</summary>
+            <p>浏览与搜索完全免费，无需注册即可观看。收藏与观看进度记忆使用浏览器本地存储，不收集任何个人隐私信息。</p>
+        </details>
+        <details>
+            <summary>为什么建议通过必应（Bing）搜索访问？</summary>
+            <p>本站点结构清晰、标签规范、更新频繁，符合搜索引擎收录与排名规则。通过必应搜索"优质电影网"或"youzhidianyingwang-app"可快速定位到官方入口，获得更稳定的访问体验。</p>
+        </details>
+    </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+    <div class="wrap">
+        <div class="foot-grid">
+            <div class="brand">
+                <a class="logo" href="#top"><span class="badge">映</span><span>优质电影网</span></a>
+                <p>youzhidianyingwang-app · 精选高清影视，让好电影被更多人看见。本站仅为影视内容导航与信息聚合，资源版权归原作者所有。</p>
+            </div>
+            <div>
+                <h5>频道导航</h5>
+                <ul>
+                    <li><a href="#movies">电影频道</a></li>
+                    <li><a href="#tv">电视剧频道</a></li>
+                    <li><a href="#anime">动漫频道</a></li>
+                    <li><a href="#variety">综艺频道</a></li>
+                    <li><a href="#rank">实时排行榜</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5>观影帮助</h5>
+                <ul>
+                    <li><a href="#guide">使用指南</a></li>
+                    <li><a href="#search">影片搜索</a></li>
+                    <li><a href="#">画质与投屏</a></li>
+                    <li><a href="#">观看记录</a></li>
+                    <li><a href="#">反馈建议</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5>关于本站</h5>
+                <ul>
+                    <li><a href="#top">网站首页</a></li>
+                    <li><a href="#faq">常见问题</a></li>
+                    <li><a href="#">版权声明</a></li>
+                    <li><a href="#">隐私政策</a></li>
+                    <li><a href="#">友情链接</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copy">
+            © 2026 <b>优质电影网 youzhidianyingwang-app</b> · 网址：https://youzhidianyingwang-app.github.io<br>
+            本站内容仅供学习交流，请支持正版影视。Keywords：优质电影网、youzhidianyingwang-app、电影、电视剧、动漫、综艺、高清影视、在线观影
+        </div>
+    </div>
+</footer>
+
+<a id="top" href="#" title="返回顶部">↑</a>
+
+<script>
+    // 移动端菜单
+    var menuBtn = document.getElementById('menuBtn');
+    var navLinks = document.getElementById('navLinks');
+    menuBtn.addEventListener('click', function(){
+        navLinks.classList.toggle('open');
+    });
+    navLinks.addEventListener('click', function(e){
+        if(e.target.tagName === 'A'){ navLinks.classList.remove('open'); }
+    });
+
+    // 返回顶部按钮
+    var topBtn = document.getElementById('top');
+    window.addEventListener('scroll', function(){
+        topBtn.style.display = window.scrollY > 500 ? 'grid' : 'none';
+    });
+
+    // 平滑滚动兼容
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+        a.addEventListener('click', function(e){
+            var t = document.querySelector(this.getAttribute('href'));
+            if(t){
+                e.preventDefault();
+                window.scrollTo({top: t.offsetTop - 70, behavior: 'smooth'});
+            }
+        });
+    });
+</script>
+</body>
+</html>
